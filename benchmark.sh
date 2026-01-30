@@ -165,10 +165,37 @@ export SCRIPT_DIR
 export NO_INTERACTIVE
 
 # ============================================================================
+# Cleanup
+# ============================================================================
+
+cleanup_all() {
+    # Remove temporary disk test directory
+    if [[ -d "${DISK_TEST_DIR:-$SCRIPT_DIR/tmp_disk_test}" ]]; then
+        rm -rf "${DISK_TEST_DIR:-$SCRIPT_DIR/tmp_disk_test}"
+    fi
+    
+    # Remove state file
+    if [[ -f "$STATE_FILE" ]]; then
+        rm -f "$STATE_FILE"
+    fi
+    
+    # Remove any stray stress-ng yaml files
+    if [[ -f "$RESULT_DIR/stress_raw.yaml" ]]; then
+        rm -f "$RESULT_DIR/stress_raw.yaml"
+    fi
+    
+    # Remove any temp fio json files
+    rm -f "$RESULT_DIR"/fio_*.json 2>/dev/null
+}
+
+# ============================================================================
 # Main Entry Point
 # ============================================================================
 
 main() {
+    # register cleanup trap
+    trap cleanup_all EXIT INT TERM
+
     # Create output directory
     mkdir -p "$RESULT_DIR"
     
@@ -273,8 +300,10 @@ BANNER
     echo -e "  ${DIM}Open results.html in a browser to view the interactive report${RESET}"
     echo ""
     
-    # Cleanup state file
-    clear_state
+    # Optional uninstallation
+    if [[ "$NO_INTERACTIVE" != true ]]; then
+        uninstall_dependencies
+    fi
     
     exit 0
 }

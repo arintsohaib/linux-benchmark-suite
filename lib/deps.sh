@@ -100,6 +100,26 @@ install_dependencies() {
     fi
 }
 
+uninstall_dependencies() {
+    log_section "Uninstall Dependencies"
+    
+    echo -e "  ${BOLD}The following packages will be removed:${RESET}"
+    echo -e "  ${DIM}${REQUIRED_PKGS[*]}${RESET}"
+    echo ""
+    
+    read -p "$(echo -e "  ${BOLD}${RED}Are you sure you want to uninstall these packages? [y/N]:${RESET} ")" ans
+    if [[ "${ans,,}" == "y" ]]; then
+        log "Uninstalling dependencies..." STEP
+        
+        DEBIAN_FRONTEND=noninteractive apt-get remove -y "${REQUIRED_PKGS[@]}"
+        DEBIAN_FRONTEND=noninteractive apt-get autoremove -y
+        
+        log "Dependencies uninstalled successfully" SUCCESS
+    else
+        log "Skipping uninstallation" INFO
+    fi
+}
+
 # ============================================================================
 # Upgrade and Reboot Handling
 # ============================================================================
