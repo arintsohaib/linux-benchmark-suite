@@ -33,6 +33,7 @@ SKIP_DISK=false
 SKIP_STRESS=false
 SKIP_UPGRADE=false
 NO_INTERACTIVE=false
+WITH_GPU=false
 
 # ============================================================================
 # Parse Command Line Arguments
@@ -56,6 +57,8 @@ ${BOLD:-}OPTIONS:${RESET:-}
     --skip-disk             Skip disk benchmark
     --skip-stress           Skip stress test
     --skip-upgrade          Skip system upgrade check
+    
+    --with-gpu              Include GPU benchmark (Intel/AMD/NVIDIA)
     
     -y, --yes               Non-interactive mode (auto-yes)
     -h, --help              Show this help message
@@ -119,6 +122,10 @@ while [[ $# -gt 0 ]]; do
             SKIP_UPGRADE=true
             shift
             ;;
+        --with-gpu)
+            WITH_GPU=true
+            shift
+            ;;
         -y|--yes)
             NO_INTERACTIVE=true
             shift
@@ -149,6 +156,7 @@ source "$SCRIPT_DIR/lib/cpu.sh"
 source "$SCRIPT_DIR/lib/memory.sh"
 source "$SCRIPT_DIR/lib/disk.sh"
 source "$SCRIPT_DIR/lib/stress.sh"
+source "$SCRIPT_DIR/lib/gpu.sh"
 source "$SCRIPT_DIR/lib/report.sh"
 
 # Export for use in modules
@@ -236,6 +244,11 @@ BANNER
         run_stress_test "$DURATION"
     else
         log "Skipping stress test" INFO
+    fi
+    
+    if [[ "$WITH_GPU" == true ]]; then
+        cooldown 5 "Preparing for GPU benchmark"
+        run_gpu_test "$RESULT_DIR"
     fi
     
     # ─────────────────────────────────────────────────────────────────────────

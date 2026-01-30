@@ -70,6 +70,7 @@ sudo ./benchmark.sh [OPTIONS]
 | `--skip-disk` | Skip disk benchmark |
 | `--skip-stress` | Skip stress test |
 | `--skip-upgrade` | Skip system upgrade check |
+| `--with-gpu` | **Include GPU benchmark** (Intel/AMD/NVIDIA) |
 | `-y, --yes` | Non-interactive mode |
 | `-h, --help` | Show help message |
 | `-v, --version` | Show version |
@@ -85,6 +86,9 @@ sudo ./benchmark.sh --duration=30m
 
 # Quick benchmark without stress test
 sudo ./benchmark.sh --skip-stress
+
+# Include GPU benchmark (Intel/AMD/NVIDIA)
+sudo ./benchmark.sh --with-gpu
 
 # Non-interactive mode for automation
 sudo ./benchmark.sh -y --skip-upgrade
@@ -134,6 +138,13 @@ Results are saved to the `output/` directory:
 - Memory stress (all available)
 - I/O operations stress
 - Context switching stress
+
+### GPU Benchmark *(optional, use `--with-gpu`)*
+- Auto-detects Intel/AMD/NVIDIA GPUs
+- VA-API video acceleration profiles
+- OpenCL compute capabilities
+- GPU frequency and temperature
+- Supports: Intel iGPU, AMD Radeon, NVIDIA GeForce/Quadro
 
 ---
 
