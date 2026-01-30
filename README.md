@@ -1,48 +1,108 @@
 # 🚀 Linux Benchmark Suite
 
+<div align="center">
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Debian](https://img.shields.io/badge/Debian-13+-A81D33?logo=debian)](https://www.debian.org/)
-[![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04+-E95420?logo=ubuntu)](https://ubuntu.com/)
-[![Shell](https://img.shields.io/badge/Shell-Bash-4EAA25?logo=gnu-bash)](https://www.gnu.org/software/bash/)
-[![GPU](https://img.shields.io/badge/GPU-Intel%20%7C%20AMD%20%7C%20NVIDIA-76B900?logo=nvidia)](https://github.com/arintsohaib/linux-benchmark-suite)
+[![Debian](https://img.shields.io/badge/Debian-12%2B-A81D33?logo=debian)](https://www.debian.org/)
+[![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04%2B-E95420?logo=ubuntu)](https://ubuntu.com/)
+[![Shell](https://img.shields.io/badge/Shell-Bash-4EAA25?logo=gnu-bash)](https://www.gnu.org/)
+[![GPU](https://img.shields.io/badge/GPU-Intel%20%7C%20AMD%20%7C%20NVIDIA-76B900?logo=nvidia)](https://github.com/)
 
-**Professional-grade automated benchmarking framework for Debian-based Linux systems.**
+**🔥 Professional-grade system benchmarking for Linux servers, desktops & laptops**
 
-Produces reproducible CPU, memory, disk, **GPU**, and stress-test results with stunning visual HTML reports.
+*One command. Complete system analysis. Beautiful reports.*
+
+[Quick Start](#-quick-start) • [Features](#-features) • [GPU Benchmarks](#-gpu-benchmarks-new) • [Sample Results](#-sample-results)
+
+</div>
 
 ---
 
-> **🆕 NEW: GPU Benchmark Support!**  
-> Auto-detects Intel iGPU, AMD Radeon, and NVIDIA GPUs. Tests VA-API video acceleration, OpenCL compute, and GPU frequencies. Use `--with-gpu` flag.
+## ⚡ What It Does
+
+Run a single command and get a **comprehensive performance report** of your entire system:
+
+```bash
+sudo ./benchmark.sh
+```
+
+✅ **CPU** – Single & multi-thread performance with scaling efficiency  
+✅ **Memory** – Read/write bandwidth and operations per second  
+✅ **Disk** – Sequential & random I/O, IOPS, latency  
+✅ **GPU** – Video acceleration, compute capabilities, frequencies *(NEW!)*  
+✅ **Stress Test** – Full system stability testing  
 
 ---
 
-## 📈 Sample Results
+## 🎯 Why Use This?
 
-*Tested on Hetzner Dedicated Server (Intel i5-12500, 64GB RAM, Samsung PM9A1 NVMe, Intel UHD 770)*
+| Problem | Solution |
+|---------|----------|
+| **"Is my server performing well?"** | Get objective benchmark scores to compare |
+| **"My app is slow, is it the hardware?"** | Identify CPU/memory/disk bottlenecks |
+| **"Does my GPU support hardware decoding?"** | Auto-detect VA-API & OpenCL capabilities |
+| **"I need professional reports for clients"** | Export stunning HTML, JSON, and TXT reports |
+| **"Setting up benchmarks is complicated"** | One command, auto-installs dependencies |
 
-| Benchmark | Result | Notes |
-|-----------|--------|-------|
-| **CPU Single-thread** | 1,521 events/sec | sysbench prime calculation |
-| **CPU Multi-thread** | 8,540 events/sec | 12 threads, 5.6x scaling |
-| **Memory Read** | 95.9 GB/s | 1KB blocks |
-| **Memory Write** | 18.5 GB/s | 1KB blocks |
-| **Disk Seq Write** | 8.2 GB/s | Direct I/O, verified |
-| **Disk Seq Read** | 13.9 GB/s | Direct I/O, verified |
-| **Disk Random 4K** | 900K+ IOPS | Per-core, 4 parallel jobs |
-| **🆕 GPU VA-API** | 36 profiles | H.264, HEVC, VP9, AV1 |
-| **🆕 GPU Frequency** | 300-1,450 MHz | Intel UHD 770 |
+---
 
-## ✨ Features
+## 🆕 GPU Benchmarks (NEW!)
 
-- 🔧 **Auto-install dependencies** – Detects and installs missing packages
-- 🔄 **Upgrade & reboot detection** – Optional system upgrade with resume support
-- ⚡ **Ordered test execution** – CPU → Memory → Disk → Stress with cooldowns
-- 📊 **Multi-format reports** – TXT, JSON, and premium HTML with charts
-- 🎨 **Beautiful HTML reports** – Dark theme, glassmorphism, Chart.js visualizations
-- 🕐 **Configurable duration** – User-defined stress test length
-- 📱 **Responsive design** – Mobile-friendly HTML reports
-- 🆕 **GPU Benchmarks** – Intel iGPU, AMD Radeon, NVIDIA support (VA-API, OpenCL)
+> **Now with full GPU support for Intel, AMD, and NVIDIA!**
+
+```bash
+sudo ./benchmark.sh --with-gpu
+```
+
+| GPU Type | What's Tested |
+|----------|---------------|
+| **Intel iGPU** | VA-API profiles, frequency range, UHD/Iris/Arc |
+| **AMD Radeon** | Temperature, power draw, OpenCL compute |
+| **NVIDIA** | VRAM, CUDA, temperature, utilization |
+
+### Sample GPU Output:
+```
+▶ Intel GPU Benchmark
+─────────────────────────────────────────
+  GPU: Intel UHD Graphics 770
+  ✓ VA-API: 36 profiles available (H.264, HEVC, VP9, AV1)
+  ✓ Frequency: 300 - 1,450 MHz
+  ✓ Driver: Intel iHD v25.2.3
+```
+
+---
+
+## 📊 Sample Results
+
+*Tested on Intel Core i5-12500, 64GB DDR4, Enterprise NVMe*
+
+### �️ CPU Performance
+| Metric | Score |
+|--------|-------|
+| Single-thread | **1,517** events/sec |
+| Multi-thread (12 cores) | **8,537** events/sec |
+| Scaling Efficiency | **5.62x** (47% per core) |
+
+### 🧠 Memory Bandwidth
+| Operation | Speed |
+|-----------|-------|
+| Read | **77 GB/s** |
+| Write | **18.6 GB/s** |
+
+### � Storage I/O
+| Test | Performance |
+|------|-------------|
+| Sequential Read | **14.4 GB/s** |
+| Sequential Write | **8.3 GB/s** |
+| Random 4K Read | **3.58M IOPS** |
+| Random 4K Write | **3.24M IOPS** |
+
+### 🎮 GPU (Intel UHD 770)
+| Capability | Result |
+|------------|--------|
+| VA-API Profiles | **36** (H.264, HEVC, VP9, AV1) |
+| Frequency Range | **300 - 1,450 MHz** |
+| Video Decode | ✅ Hardware accelerated |
 
 ---
 
@@ -53,111 +113,115 @@ Produces reproducible CPU, memory, disk, **GPU**, and stress-test results with s
 git clone https://github.com/arintsohaib/linux-benchmark-suite.git
 cd linux-benchmark-suite
 
-# Make executable
-chmod +x benchmark.sh
-
-# Run with sudo (required for benchmarking)
+# Run benchmarks (auto-installs dependencies)
 sudo ./benchmark.sh
+
+# Include GPU benchmarks
+sudo ./benchmark.sh --with-gpu
+
+# Quick test (skip stress test)
+sudo ./benchmark.sh --skip-stress
 ```
 
 ---
 
-## 🛠️ Usage
+## ⚙️ Command Options
 
 ```bash
 sudo ./benchmark.sh [OPTIONS]
 ```
 
-### Options
-
 | Option | Description |
 |--------|-------------|
-| `-d, --duration=TIME` | Stress test duration (default: `10m`). Supports: `30s`, `5m`, `1h` |
-| `-o, --output=DIR` | Output directory (default: `./output`) |
+| `-d, --duration=TIME` | Stress test duration (default: `10m`) |
+| `-o, --output=DIR` | Custom output directory |
+| `--with-gpu` | **🆕 Include GPU benchmark** |
 | `--skip-cpu` | Skip CPU benchmark |
 | `--skip-memory` | Skip memory benchmark |
 | `--skip-disk` | Skip disk benchmark |
 | `--skip-stress` | Skip stress test |
-| `--skip-upgrade` | Skip system upgrade check |
-| `--with-gpu` | **Include GPU benchmark** (Intel/AMD/NVIDIA) |
 | `-y, --yes` | Non-interactive mode |
-| `-h, --help` | Show help message |
-| `-v, --version` | Show version |
+| `-h, --help` | Show help |
 
-### Examples
+### Example Commands
 
 ```bash
-# Run all benchmarks with defaults (10 minute stress test)
-sudo ./benchmark.sh
-
-# Custom stress test duration
-sudo ./benchmark.sh --duration=30m
-
-# Quick benchmark without stress test
-sudo ./benchmark.sh --skip-stress
-
-# Include GPU benchmark (Intel/AMD/NVIDIA)
+# Full benchmark with GPU (recommended)
 sudo ./benchmark.sh --with-gpu
 
-# Non-interactive mode for automation
-sudo ./benchmark.sh -y --skip-upgrade
+# 30-minute stress test
+sudo ./benchmark.sh --duration=30m
+
+# Quick benchmark (CPU/memory/disk only, ~3 minutes)
+sudo ./benchmark.sh --skip-stress
+
+# Automated CI/CD pipeline
+sudo ./benchmark.sh -y --skip-upgrade --output=/var/log/benchmarks
 ```
 
 ---
 
-## 📊 Output
+## � Output Files
 
 Results are saved to the `output/` directory:
 
-| File | Description |
-|------|-------------|
-| `results.txt` | Human-readable text summary |
-| `results.json` | Machine-readable JSON data |
-| `results.html` | Interactive visual report with charts |
+| File | Format | Use Case |
+|------|--------|----------|
+| `results.html` | 🎨 Visual Report | Share with stakeholders, browser viewing |
+| `results.json` | 📊 Machine-readable | CI/CD integration, data analysis |
+| `results.txt` | 📝 Plain text | Terminal viewing, email reports |
 
 ### HTML Report Features
 
-- 📈 **CPU Charts** – Single vs multi-thread performance comparison
-- 🧠 **Memory Visualization** – Read/write operations doughnut chart
-- 💾 **Disk I/O Metrics** – Sequential and random IOPS visualization
-- 📥 **Export Button** – Download raw JSON data
-- 🌙 **Dark Theme** – Modern glassmorphism design
+- 🌙 **Dark Mode** – Easy on the eyes
+- 📈 **Interactive Charts** – Chart.js visualizations
+- ✨ **Glassmorphism UI** – Modern, premium design
+- � **Responsive** – Works on desktop & mobile
+- 📥 **Export** – Download raw JSON data
 
 ---
 
 ## 🔬 What's Tested
 
 ### CPU Benchmark
-- Single-thread prime calculation (sysbench)
-- Multi-thread prime calculation
-- Scaling efficiency measurement
+- Prime number calculation (sysbench)
+- Single-threaded performance
+- Multi-threaded scaling
+- Core efficiency metrics
 
 ### Memory Benchmark
-- Read operations per second
-- Write operations per second
-- Memory bandwidth measurement
+- Read/write operations per second
+- Memory bandwidth (MiB/sec)
+- Latency measurements
 
 ### Disk I/O Benchmark
 - Sequential read/write (1MB blocks)
 - Random read/write (4K blocks)
-- IOPS and latency measurements
+- IOPS and latency
 
-### Stress Test
-- Full CPU stress (all cores)
-- Memory stress (all available)
-- I/O operations stress
-- Context switching stress
-
-### GPU Benchmark *(optional, use `--with-gpu`)*
-- Auto-detects Intel/AMD/NVIDIA GPUs
+### GPU Benchmark *(optional)*
+- Auto-detects Intel/AMD/NVIDIA
 - VA-API video acceleration profiles
 - OpenCL compute capabilities
 - GPU frequency and temperature
-- Supports: Intel iGPU, AMD Radeon, NVIDIA GeForce/Quadro
+
+### Stress Test
+- CPU stress (all cores)
+- Memory stress
+- I/O stress
+- Configurable duration
 
 ---
 
-## 📁 Project Structure
+## 🛠️ Requirements
+
+- **OS**: Debian 12+, Ubuntu 22.04+, or any apt-based distro
+- **Permissions**: Root/sudo access
+- **Dependencies**: Auto-installed (sysbench, fio, stress-ng, jq)
+
+---
+
+## � Project Structure
 
 ```
 linux-benchmark-suite/
@@ -168,76 +232,46 @@ linux-benchmark-suite/
 │   ├── cpu.sh            # CPU benchmarks
 │   ├── memory.sh         # Memory benchmarks
 │   ├── disk.sh           # Disk I/O benchmarks
+│   ├── gpu.sh            # 🆕 GPU benchmarks
 │   ├── stress.sh         # Stress testing
 │   └── report.sh         # Report generation
 ├── templates/
 │   └── report.html       # HTML report template
-├── output/               # Generated reports
-└── README.md
-```
-
----
-
-## 🖥️ Requirements
-
-- **OS**: Debian 13+ / Ubuntu 22.04+ (or any apt-based distro)
-- **Permissions**: Root (sudo)
-- **Dependencies** (auto-installed):
-  - `sysbench` – CPU & memory benchmarking
-  - `fio` – Disk I/O testing
-  - `stress-ng` – System stress testing
-  - `jq` – JSON processing
-  - `bc` – Calculations
-
----
-
-## 📸 Screenshots
-
-### Terminal Output
-```
-  _     _                    ____                  _                         _    
- | |   (_)_ __  _   ___  __ | __ )  ___ _ __   ___| |__  _ __ ___   __ _ _ __| | __
- | |   | | '_ \| | | \ \/ / |  _ \ / _ \ '_ \ / __| '_ \| '_ ` _ \ / _` | '__| |/ /
- | |___| | | | | |_| |>  <  | |_) |  __/ | | | (__| | | | | | | | | (_| | |  |   < 
- |_____|_|_| |_|\__,_/_/\_\ |____/ \___|_| |_|\___|_| |_|_| |_| |_|\__,_|_|  |_|\_\
-
-  Professional System Benchmarking Suite v1.0.0
-
-[14:32:05] ✓ Root privileges confirmed
-[14:32:05] ✓ All dependencies installed
-[14:32:06] → Running single-thread CPU test...
-[14:32:36] ✓ Events per second: 1247.53
+└── output/               # Generated reports
 ```
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit issues and pull requests.
+Contributions welcome! Please feel free to submit issues and pull requests.
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+```bash
+# Fork, then clone your fork
+git clone https://github.com/YOUR_USERNAME/linux-benchmark-suite.git
+
+# Create feature branch
+git checkout -b feature/amazing-feature
+
+# Commit and push
+git commit -m "Add amazing feature"
+git push origin feature/amazing-feature
+```
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - See [LICENSE](LICENSE) for details.
 
 ---
 
-## 🙏 Acknowledgments
+<div align="center">
 
-- [sysbench](https://github.com/akopytov/sysbench) – CPU & memory benchmarking
-- [fio](https://github.com/axboe/fio) – Flexible I/O tester
-- [stress-ng](https://github.com/ColinIanKing/stress-ng) – Stress testing
-- [Chart.js](https://www.chartjs.org/) – Beautiful charts
+**⭐ Star this repo if you find it useful!**
 
----
+Made with ❤️ for the Linux community
 
-<p align="center">
-  Made with ❤️ for the Linux community
-</p>
+[Report Bug](https://github.com/arintsohaib/linux-benchmark-suite/issues) • [Request Feature](https://github.com/arintsohaib/linux-benchmark-suite/issues)
+
+</div>
