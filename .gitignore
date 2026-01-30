@@ -1,0 +1,19 @@
+# Ignore output directory
+output/
+!output/.gitkeep
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# State file
+/var/tmp/linux-benchmark.state
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/

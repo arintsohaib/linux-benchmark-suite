@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Benchmark Results | {{HOSTNAME}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --bg-glass: rgba(30, 41, 59, 0.4);
+            
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            
+            --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --gradient-success: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+            --gradient-warm: linear-gradient(135deg, #f59e0b 0%, #f43f5e 100%);
+            
+            --border-color: rgba(148, 163, 184, 0.1);
+            --shadow-glow: 0 0 60px rgba(59, 130, 246, 0.15);
+            
+            --radius-sm: 0.5rem;
+            --radius-md: 1rem;
+            --radius-lg: 1.5rem;
+            --radius-xl: 2rem;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Background Effects */
+        .bg-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .bg-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+        }
+        
+        .bg-glow-1 {
+            top: -200px;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: var(--accent-blue);
+        }
+        
+        .bg-glow-2 {
+            bottom: -300px;
+            left: -200px;
+            width: 800px;
+            height: 800px;
+            background: var(--accent-purple);
+            opacity: 0.2;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-bottom: 3rem;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-xl);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-glow);
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.85);
+        }
+        
+        .header .timestamp {
+            margin-top: 1.5rem;
+            padding: 0.5rem 1.5rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: var(--radius-lg);
+            display: inline-block;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        /* System Info Bar */
+        .system-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+        }
+        
+        .system-item {
+            display: flex;
+            flex-direction: column;
+            padding: 0.5rem 1rem;
+            border-left: 2px solid var(--accent-blue);
+        }
+        
+        .system-item:first-child {
+            border-left: none;
+            padding-left: 0;
+        }
+        
+        .system-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+        
+        .system-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 900px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Card Styles */
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            font-size: 1.5rem;
+        }
+        
+        .card-icon.cpu { background: var(--gradient-primary); }
+        .card-icon.memory { background: var(--gradient-success); }
+        .card-icon.disk { background: var(--gradient-warm); }
+        .card-icon.stress { background: linear-gradient(135deg, #8b5cf6 0%, #f43f5e 100%); }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        /* Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .metric {
+            padding: 1rem;
+            background: var(--bg-glass);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+        
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .metric-unit {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+        
+        /* Progress Bars */
+        .progress-container {
+            margin-top: 1rem;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 1.5s ease-out;
+            position: relative;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .progress-fill.blue { background: var(--gradient-primary); }
+        .progress-fill.green { background: var(--gradient-success); }
+        .progress-fill.warm { background: var(--gradient-warm); }
+        
+        /* Charts */
+        .chart-container {
+            margin-top: 1.5rem;
+            height: 200px;
+            position: relative;
+        }
+        
+        /* Full Width Card */
+        .card-full {
+            grid-column: span 2;
+        }
+        
+        @media (max-width: 900px) {
+            .card-full {
+                grid-column: span 1;
+            }
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 2rem;
+            color: var(--text-muted);
+        }
+        
+        .footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .card {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+        
+        /* Export Button */
+        .export-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-effects">
+        <div class="bg-glow bg-glow-1"></div>
+        <div class="bg-glow bg-glow-2"></div>
+    </div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">🚀</div>
+                <h1>Linux Benchmark Suite</h1>
+                <p class="subtitle">Professional System Performance Report</p>
+                <div class="timestamp">📅 {{TIMESTAMP}}</div>
+            </div>
+        </header>
+        
+        <!-- System Info Bar -->
+        <div class="system-bar">
+            <div class="system-item">
+                <span class="system-label">Hostname</span>
+                <span class="system-value">{{HOSTNAME}}</span>
+            </div>
+            <div class="system-item">
+                <span class="system-label">Operating System</span>
+                <span class="system-value">{{OS_NAME}} {{OS_VERSION}}</span>
+            </div>
+            <div class="system-item">
+                <span class="system-label">Kernel</span>
+                <span class="system-value">{{KERNEL}}</span>
+            </div>
+            <div class="system-item">
+                <span class="system-label">CPU</span>
+                <span class="system-value">{{CPU_CORES}} cores / {{CPU_THREADS}} threads</span>
+            </div>
+            <div class="system-item">
+                <span class="system-label">Memory</span>
+                <span class="system-value">{{MEM_TOTAL}} MB</span>
+            </div>
+            <div class="system-item">
+                <span class="system-label">Root Disk</span>
+                <span class="system-value">{{DISK_TOTAL}} GB</span>
+            </div>
+        </div>
+        
+        <!-- Cards Grid -->
+        <div class="cards-grid">
+            <!-- CPU Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon cpu">⚡</div>
+                    <h2 class="card-title">CPU Performance</h2>
+                </div>
+                
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <div class="metric-label">Single Thread</div>
+                        <div class="metric-value">{{CPU_SINGLE}}</div>
+                        <div class="metric-unit">events/sec</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Multi Thread</div>
+                        <div class="metric-value">{{CPU_MULTI}}</div>
+                        <div class="metric-unit">events/sec</div>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Scaling Efficiency</span>
+                        <span id="cpu-scaling-display">{{CPU_SCALING}}x</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill blue" id="cpu-scaling-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="cpuChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Memory Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon memory">🧠</div>
+                    <h2 class="card-title">Memory Performance</h2>
+                </div>
+                
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <div class="metric-label">Read Ops</div>
+                        <div class="metric-value">{{MEM_READ_OPS}}</div>
+                        <div class="metric-unit">ops/sec</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Write Ops</div>
+                        <div class="metric-value">{{MEM_WRITE_OPS}}</div>
+                        <div class="metric-unit">ops/sec</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="memoryChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Disk Card -->
+            <div class="card card-full">
+                <div class="card-header">
+                    <div class="card-icon disk">💾</div>
+                    <h2 class="card-title">Disk I/O Performance</h2>
+                </div>
+                
+                <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr);">
+                    <div class="metric">
+                        <div class="metric-label">Seq. Read</div>
+                        <div class="metric-value">{{DISK_SEQ_READ}}</div>
+                        <div class="metric-unit">MB/s</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Seq. Write</div>
+                        <div class="metric-value">{{DISK_SEQ_WRITE}}</div>
+                        <div class="metric-unit">MB/s</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Random Read 4K</div>
+                        <div class="metric-value">{{DISK_RAND_READ}}</div>
+                        <div class="metric-unit">IOPS</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Random Write 4K</div>
+                        <div class="metric-value">{{DISK_RAND_WRITE}}</div>
+                        <div class="metric-unit">IOPS</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container" style="height: 250px;">
+                    <canvas id="diskChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Generated by <strong>Linux Benchmark Suite</strong> v1.0.0</p>
+            <p><a href="https://github.com/arintsohaib/linux-benchmark-suite" target="_blank">github.com/arintsohaib/linux-benchmark-suite</a></p>
+            <button class="export-btn" onclick="exportJSON()">📥 Export JSON Data</button>
+        </footer>
+    </div>
+    
+    <script>
+        // Benchmark data
+        const benchmarkData = {
+            system: {{SYSTEM_JSON}},
+            cpu: {{CPU_JSON}},
+            memory: {{MEMORY_JSON}},
+            disk: {{DISK_JSON}},
+            stress: {{STRESS_JSON}}
+        };
+        
+        // Chart.js configuration
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.borderColor = 'rgba(148, 163, 184, 0.1)';
+        
+        // CPU Chart
+        const cpuCtx = document.getElementById('cpuChart').getContext('2d');
+        new Chart(cpuCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Single Thread', 'Multi Thread'],
+                datasets: [{
+                    label: 'Events/sec',
+                    data: [{{CPU_SINGLE}}, {{CPU_MULTI}}],
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(139, 92, 246, 0.8)'
+                    ],
+                    borderRadius: 8,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+        
+        // Memory Chart
+        const memCtx = document.getElementById('memoryChart').getContext('2d');
+        new Chart(memCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Read', 'Write'],
+                datasets: [{
+                    data: [{{MEM_READ_OPS}}, {{MEM_WRITE_OPS}}],
+                    backgroundColor: [
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(6, 182, 212, 0.8)'
+                    ],
+                    borderWidth: 0,
+                    spacing: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+        
+        // Disk Chart
+        const diskCtx = document.getElementById('diskChart').getContext('2d');
+        new Chart(diskCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Seq Read', 'Seq Write', 'Random Read 4K', 'Random Write 4K'],
+                datasets: [{
+                    label: 'Performance',
+                    data: [{{DISK_SEQ_READ}}, {{DISK_SEQ_WRITE}}, {{DISK_RAND_READ}}/1000, {{DISK_RAND_WRITE}}/1000],
+                    backgroundColor: [
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(244, 63, 94, 0.8)',
+                        'rgba(245, 158, 11, 0.6)',
+                        'rgba(244, 63, 94, 0.6)'
+                    ],
+                    borderRadius: 8,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+        
+        // Animate progress bars
+        setTimeout(() => {
+            const scaling = parseFloat('{{CPU_SCALING}}') || 0;
+            const scalingPercent = Math.min((scaling / {{CPU_THREADS}}) * 100, 100);
+            document.getElementById('cpu-scaling-bar').style.width = scalingPercent + '%';
+        }, 500);
+        
+        // Export function
+        function exportJSON() {
+            const dataStr = JSON.stringify(benchmarkData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'benchmark-results.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
