@@ -23,8 +23,9 @@ run_disk_test() {
     local output_dir="${RESULT_DIR:-output}"
     local json_file="$output_dir/disk.json"
     
-    # Create test directory
+    # Create directories
     mkdir -p "$DISK_TEST_DIR"
+    mkdir -p "$output_dir"
     
     echo -e "  ${BOLD}Test size:${RESET}   $DISK_SIZE"
     echo -e "  ${BOLD}Duration:${RESET}    ${DISK_RUNTIME}s per test"
