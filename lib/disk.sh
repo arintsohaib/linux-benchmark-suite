@@ -49,8 +49,8 @@ run_disk_test() {
     log_section "Sequential Read (1M blocks)"
     log "Running sequential read test..." STEP
     
-    local seq_read_json="$output_dir/fio_seq_read.json"
-    fio --name=seq_read \
+    local seq_read_log="$(mktemp)"
+    if ! fio --name=seq_read \
         --directory="$DISK_TEST_DIR" \
         --size=$DISK_SIZE \
         --time_based \
@@ -63,7 +63,12 @@ run_disk_test() {
         --group_reporting \
         --output-format=json \
         --output="$seq_read_json" \
-        &>/dev/null
+        &> "$seq_read_log"; then
+        
+        log "Sequential read test failed. See error below:" ERROR
+        cat "$seq_read_log" | sed 's/^/    /'
+    fi
+    rm -f "$seq_read_log"
     
     local seq_read_bw=$(jq -r '.jobs[0].read.bw_bytes // 0' "$seq_read_json" 2>/dev/null)
     local seq_read_iops=$(jq -r '.jobs[0].read.iops // 0' "$seq_read_json" 2>/dev/null)
@@ -89,8 +94,8 @@ run_disk_test() {
     log_section "Sequential Write (1M blocks)"
     log "Running sequential write test..." STEP
     
-    local seq_write_json="$output_dir/fio_seq_write.json"
-    fio --name=seq_write \
+    local seq_write_log="$(mktemp)"
+    if ! fio --name=seq_write \
         --directory="$DISK_TEST_DIR" \
         --size=$DISK_SIZE \
         --time_based \
@@ -103,7 +108,12 @@ run_disk_test() {
         --group_reporting \
         --output-format=json \
         --output="$seq_write_json" \
-        &>/dev/null
+        &> "$seq_write_log"; then
+        
+        log "Sequential write test failed. See error below:" ERROR
+        cat "$seq_write_log" | sed 's/^/    /'
+    fi
+    rm -f "$seq_write_log"
     
     local seq_write_bw=$(jq -r '.jobs[0].write.bw_bytes // 0' "$seq_write_json" 2>/dev/null)
     local seq_write_iops=$(jq -r '.jobs[0].write.iops // 0' "$seq_write_json" 2>/dev/null)
@@ -129,8 +139,8 @@ run_disk_test() {
     log_section "Random Read (4K blocks)"
     log "Running random read test..." STEP
     
-    local rand_read_json="$output_dir/fio_rand_read.json"
-    fio --name=rand_read \
+    local rand_read_log="$(mktemp)"
+    if ! fio --name=rand_read \
         --directory="$DISK_TEST_DIR" \
         --size=$DISK_SIZE \
         --time_based \
@@ -144,7 +154,12 @@ run_disk_test() {
         --group_reporting \
         --output-format=json \
         --output="$rand_read_json" \
-        &>/dev/null
+        &> "$rand_read_log"; then
+        
+        log "Random read test failed. See error below:" ERROR
+        cat "$rand_read_log" | sed 's/^/    /'
+    fi
+    rm -f "$rand_read_log"
     
     local rand_read_iops=$(jq -r '.jobs[0].read.iops // 0' "$rand_read_json" 2>/dev/null)
     local rand_read_lat=$(jq -r '.jobs[0].read.lat_ns.mean // 0' "$rand_read_json" 2>/dev/null)
@@ -165,8 +180,8 @@ run_disk_test() {
     log_section "Random Write (4K blocks)"
     log "Running random write test..." STEP
     
-    local rand_write_json="$output_dir/fio_rand_write.json"
-    fio --name=rand_write \
+    local rand_write_log="$(mktemp)"
+    if ! fio --name=rand_write \
         --directory="$DISK_TEST_DIR" \
         --size=$DISK_SIZE \
         --time_based \
@@ -180,7 +195,12 @@ run_disk_test() {
         --group_reporting \
         --output-format=json \
         --output="$rand_write_json" \
-        &>/dev/null
+        &> "$rand_write_log"; then
+        
+        log "Random write test failed. See error below:" ERROR
+        cat "$rand_write_log" | sed 's/^/    /'
+    fi
+    rm -f "$rand_write_log"
     
     local rand_write_iops=$(jq -r '.jobs[0].write.iops // 0' "$rand_write_json" 2>/dev/null)
     local rand_write_lat=$(jq -r '.jobs[0].write.lat_ns.mean // 0' "$rand_write_json" 2>/dev/null)
