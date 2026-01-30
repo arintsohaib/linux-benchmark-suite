@@ -27,6 +27,9 @@ run_stress_test() {
     local output_dir="${RESULT_DIR:-output}"
     local json_file="$output_dir/stress.json"
     
+    # Ensure output directory exists
+    mkdir -p "$output_dir"
+    
     echo -e "  ${BOLD}Duration:${RESET}      $(format_duration $duration_seconds)"
     echo -e "  ${BOLD}CPU workers:${RESET}   $([[ $STRESS_CPU_WORKERS -eq 0 ]] && echo 'auto' || echo $STRESS_CPU_WORKERS)"
     echo -e "  ${BOLD}Memory workers:${RESET} $([[ $STRESS_VM_WORKERS -eq 0 ]] && echo 'auto' || echo $STRESS_VM_WORKERS)"

@@ -24,6 +24,9 @@ run_memory_test() {
     local output_dir="${RESULT_DIR:-output}"
     local json_file="$output_dir/memory.json"
     
+    # Ensure output directory exists
+    mkdir -p "$output_dir"
+    
     echo -e "  ${BOLD}Block size:${RESET}  $MEMORY_BLOCK_SIZE"
     echo -e "  ${BOLD}Total size:${RESET}  $MEMORY_TOTAL_SIZE"
     echo -e "  ${BOLD}Duration:${RESET}    ${MEMORY_TIME}s per test"

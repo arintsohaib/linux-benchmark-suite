@@ -316,6 +316,10 @@ GPUJSON
 
 run_gpu_test() {
     local output_dir="${1:-${RESULT_DIR:-output}}"
+    # Ensure output directory exists
+    mkdir -p "$output_dir"
+    
+    local json_file="$output_dir/gpu.json"
     
     log_header "GPU Performance Benchmark"
     

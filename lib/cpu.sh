@@ -23,6 +23,9 @@ run_cpu_test() {
     local output_dir="${RESULT_DIR:-output}"
     local json_file="$output_dir/cpu.json"
     
+    # Ensure output directory exists
+    mkdir -p "$output_dir"
+    
     echo -e "  ${BOLD}Test:${RESET}        Prime number calculation"
     echo -e "  ${BOLD}Prime limit:${RESET} $CPU_PRIME_LIMIT"
     echo -e "  ${BOLD}Duration:${RESET}    ${CPU_TIME}s per test"
