@@ -38,6 +38,8 @@ run_disk_test() {
     
     # Check O_DIRECT support
     local fio_direct=1
+    # Ensure temp dir exists for log files
+    mkdir -p "$TEMP_DIR"
     local odirect_test_log="$(mktemp)"
     if ! fio --name=odirect_test --directory="$DISK_TEST_DIR" --size=1M --rw=read --direct=1 --ioengine=libaio --output-format=json &> "$odirect_test_log"; then
         log "System does not support O_DIRECT (common in containers). Falling back to direct=0." WARN
