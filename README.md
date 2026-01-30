@@ -1,6 +1,11 @@
-# 🚀 Linux Benchmark Suite
-
 <div align="center">
+
+<img src="assets/social-preview.png" alt="Linux Benchmark Suite" width="100%" style="border-radius: 10px; margin-bottom: 20px;" />
+
+# Linux Benchmark Suite
+
+**The professional standard for system benchmarking on Linux.**
+*One command. Comprehensive analysis. Enterprise-grade reporting.*
 
 [![CI](https://github.com/arintsohaib/linux-benchmark-suite/actions/workflows/ci.yml/badge.svg)](https://github.com/arintsohaib/linux-benchmark-suite/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -8,13 +13,9 @@
 [![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04%2B-E95420?logo=ubuntu)](https://ubuntu.com/)
 [![Shell](https://img.shields.io/badge/Shell-Bash-4EAA25?logo=gnu-bash)](https://www.gnu.org/)
 [![GPU](https://img.shields.io/badge/GPU-Intel%20%7C%20AMD%20%7C%20NVIDIA-76B900?logo=nvidia)](https://github.com/)
-[![Release](https://img.shields.io/github/v/release/arintsohaib/linux-benchmark-suite?color=green)](https://github.com/arintsohaib/linux-benchmark-suite/releases)
+[![Release](https://img.shields.io/github/v/release/arintsohaib/linux-benchmark-suite?color=2ea44f)](https://github.com/arintsohaib/linux-benchmark-suite/releases)
 
-**🔥 Professional-grade system benchmarking for Linux servers, desktops & laptops**
-
-*One command. Complete system analysis. Beautiful reports.*
-
-[Quick Start](#-quick-start) • [Features](#-features) • [GPU Benchmarks](#-gpu-benchmarks-new) • [Sample Results](#-sample-results)
+[Quick Start](#-quick-start) • [Features](#-what-it-does) • [GPU Benchmarks](#-gpu-benchmarks-new) • [Sample Results](#-sample-results)
 
 </div>
 
@@ -307,6 +308,8 @@ git checkout -b feature/amazing-feature
 # Commit and push
 git commit -m "Add amazing feature"
 git push origin feature/amazing-feature
+```
+
 ---
 
 ## 🙏 Acknowledgments
