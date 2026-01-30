@@ -11,7 +11,7 @@
 
 DISK_SIZE="1G"
 DISK_RUNTIME=30
-DISK_TEST_DIR="${DISK_TEST_DIR:-/tmp/benchmark-disk}"
+DISK_TEST_DIR="${DISK_TEST_DIR:-$SCRIPT_DIR/tmp_disk_test}"
 
 # ============================================================================
 # Run Disk Benchmark
