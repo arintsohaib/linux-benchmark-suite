@@ -2,11 +2,13 @@
 
 <div align="center">
 
+[![CI](https://github.com/arintsohaib/linux-benchmark-suite/actions/workflows/ci.yml/badge.svg)](https://github.com/arintsohaib/linux-benchmark-suite/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Debian](https://img.shields.io/badge/Debian-12%2B-A81D33?logo=debian)](https://www.debian.org/)
 [![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04%2B-E95420?logo=ubuntu)](https://ubuntu.com/)
 [![Shell](https://img.shields.io/badge/Shell-Bash-4EAA25?logo=gnu-bash)](https://www.gnu.org/)
 [![GPU](https://img.shields.io/badge/GPU-Intel%20%7C%20AMD%20%7C%20NVIDIA-76B900?logo=nvidia)](https://github.com/)
+[![Release](https://img.shields.io/github/v/release/arintsohaib/linux-benchmark-suite?color=green)](https://github.com/arintsohaib/linux-benchmark-suite/releases)
 
 **🔥 Professional-grade system benchmarking for Linux servers, desktops & laptops**
 
