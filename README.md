@@ -4,16 +4,22 @@
 [![Debian](https://img.shields.io/badge/Debian-13+-A81D33?logo=debian)](https://www.debian.org/)
 [![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04+-E95420?logo=ubuntu)](https://ubuntu.com/)
 [![Shell](https://img.shields.io/badge/Shell-Bash-4EAA25?logo=gnu-bash)](https://www.gnu.org/software/bash/)
+[![GPU](https://img.shields.io/badge/GPU-Intel%20%7C%20AMD%20%7C%20NVIDIA-76B900?logo=nvidia)](https://github.com/arintsohaib/linux-benchmark-suite)
 
 **Professional-grade automated benchmarking framework for Debian-based Linux systems.**
 
-Produces reproducible CPU, memory, disk, and stress-test results with stunning visual HTML reports.
+Produces reproducible CPU, memory, disk, **GPU**, and stress-test results with stunning visual HTML reports.
+
+---
+
+> **🆕 NEW: GPU Benchmark Support!**  
+> Auto-detects Intel iGPU, AMD Radeon, and NVIDIA GPUs. Tests VA-API video acceleration, OpenCL compute, and GPU frequencies. Use `--with-gpu` flag.
 
 ---
 
 ## 📈 Sample Results
 
-*Tested on Hetzner Dedicated Server (Intel i5-12500, 64GB RAM, Samsung PM9A1 NVMe)*
+*Tested on Hetzner Dedicated Server (Intel i5-12500, 64GB RAM, Samsung PM9A1 NVMe, Intel UHD 770)*
 
 | Benchmark | Result | Notes |
 |-----------|--------|-------|
@@ -24,6 +30,8 @@ Produces reproducible CPU, memory, disk, and stress-test results with stunning v
 | **Disk Seq Write** | 8.2 GB/s | Direct I/O, verified |
 | **Disk Seq Read** | 13.9 GB/s | Direct I/O, verified |
 | **Disk Random 4K** | 900K+ IOPS | Per-core, 4 parallel jobs |
+| **🆕 GPU VA-API** | 36 profiles | H.264, HEVC, VP9, AV1 |
+| **🆕 GPU Frequency** | 300-1,450 MHz | Intel UHD 770 |
 
 ## ✨ Features
 
@@ -34,6 +42,7 @@ Produces reproducible CPU, memory, disk, and stress-test results with stunning v
 - 🎨 **Beautiful HTML reports** – Dark theme, glassmorphism, Chart.js visualizations
 - 🕐 **Configurable duration** – User-defined stress test length
 - 📱 **Responsive design** – Mobile-friendly HTML reports
+- 🆕 **GPU Benchmarks** – Intel iGPU, AMD Radeon, NVIDIA support (VA-API, OpenCL)
 
 ---
 
