@@ -40,11 +40,24 @@ run_stress_test() {
     local start_time=$(date +%s)
     local end_time=$((start_time + duration_seconds))
     
+    # Check and disable sched_autogroup_enabled if needed
+    local autogroup_path="/proc/sys/kernel/sched_autogroup_enabled"
+    local original_autogroup=""
+    
+    if [[ -f "$autogroup_path" ]]; then
+        original_autogroup=$(cat "$autogroup_path")
+        if [[ "$original_autogroup" == "1" ]]; then
+            log "Temporarily disabling sched_autogroup_enabled for better accuracy" INFO
+            echo 0 > "$autogroup_path" 2>/dev/null || log "Failed to disable sched_autogroup_enabled (permission denied?)" WARN
+        fi
+    fi
+    
     # Run stress-ng with metrics
+    # Using iomix instead of io as recommended
     stress-ng \
         --cpu $STRESS_CPU_WORKERS \
         --vm $STRESS_VM_WORKERS \
-        --io $STRESS_IO_WORKERS \
+        --iomix $STRESS_IO_WORKERS \
         --switch $STRESS_SWITCH_WORKERS \
         --timeout "${duration_seconds}s" \
         --metrics-brief \
@@ -54,6 +67,11 @@ run_stress_test() {
                 echo -e "  ${DIM}${line}${RESET}"
             fi
         done
+        
+    # Restore autogroup setting
+    if [[ -n "$original_autogroup" && "$original_autogroup" == "1" ]]; then
+        echo 1 > "$autogroup_path" 2>/dev/null || true
+    fi
     
     echo ""
     
