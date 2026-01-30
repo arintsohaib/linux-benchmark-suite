@@ -1,0 +1,104 @@
+{
+  "benchmark_suite": "Linux Benchmark Suite",
+  "version": "1.0.0",
+  "generated_at": "2026-01-30T17:11:08+01:00",
+  "system": {
+  "timestamp": "2026-01-30T17:07:32+01:00",
+  "hostname": "Debian13",
+  "os": {
+    "name": "Debian",
+    "version": "13",
+    "codename": "trixie",
+    "kernel": "6.12.63+deb13-amd64"
+  },
+  "cpu": {
+    "model": "12th Gen Intel(R) Core(TM) i5-12500",
+    "cores": 12,
+    "threads": 12,
+    "freq_mhz": 3901
+  },
+  "memory": {
+    "total_mb": 64115,
+    "available_mb": 63053
+  },
+  "disk": {
+    "root_total_gb": 460,
+    "root_available_gb": 390
+  }
+},
+  "cpu": {
+  "test_type": "cpu",
+  "timestamp": "2026-01-30T17:07:37+01:00",
+  "config": {
+    "prime_limit": 20000,
+    "time_seconds": 30
+  },
+  "results": {
+    "single_thread": {
+      "threads": 1,
+      "events_per_second": 1517.16,
+      "total_events": 45517,
+      "avg_latency_ms": 0.66
+    },
+    "multi_thread": {
+      "threads": 12,
+      "events_per_second": 8537.00,
+      "total_events": 256126,
+      "avg_latency_ms": 1.41,
+      "scaling_factor": 5.62,
+      "core_efficiency_percent": 40.0
+    }
+  }
+},
+  "memory": {
+  "test_type": "memory",
+  "timestamp": "2026-01-30T17:08:47+01:00",
+  "config": {
+    "block_size": "1K",
+    "total_size": "10G",
+    "time_seconds": 30
+  },
+  "results": {
+    "read": {
+      "operations_per_second": 78778943.34,
+      "throughput": "76932.56 MiB/sec",
+      "avg_latency_ms": 0.00
+    },
+    "write": {
+      "operations_per_second": 19105569.60,
+      "throughput": "18657.78 MiB/sec",
+      "avg_latency_ms": 0.00
+    }
+  }
+},
+  "disk": {
+  "test_type": "disk",
+  "timestamp": "2026-01-30T17:08:58+01:00",
+  "config": {
+    "size": "1G",
+    "runtime_seconds": 30,
+    "test_path": "/tmp/benchmark-disk"
+  },
+  "results": {
+    "sequential_read": {
+      "bandwidth_mbps": 14376.98,
+      "iops": 14376.987434,
+      "latency_ms": .069
+    },
+    "sequential_write": {
+      "bandwidth_mbps": 8309.15,
+      "iops": 8309.156361,
+      "latency_ms": .120
+    },
+    "random_read_4k": {
+      "iops": 3578843.543764,
+      "latency_ms": .035
+    },
+    "random_write_4k": {
+      "iops": 3236036.898770,
+      "latency_ms": .039
+    }
+  }
+},
+  "stress": {}
+}
