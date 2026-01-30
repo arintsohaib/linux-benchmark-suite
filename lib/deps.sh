@@ -72,6 +72,16 @@ install_dependencies() {
         return 0
     fi
     
+    # Check if we should prompt the user
+    if [[ "$NO_INTERACTIVE" != true ]]; then
+        echo ""
+        read -p "$(echo -e "  ${BOLD}Missing dependencies detected. Install them now? [Y/n]:${RESET} ")" ans
+        if [[ "${ans,,}" == "n" ]]; then
+            log "Cannot proceed without dependencies. Exiting." ERROR
+            exit 1
+        fi
+    fi
+    
     log "Installing missing packages: ${missing[*]}" STEP
     
     # Update package list

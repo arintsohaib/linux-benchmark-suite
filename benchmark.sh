@@ -199,7 +199,7 @@ BANNER
     # ─────────────────────────────────────────────────────────────────────────
     
     check_root
-    check_dependencies
+    check_dependencies || true
     install_dependencies
     set_cpu_performance
     
