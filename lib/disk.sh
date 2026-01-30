@@ -22,6 +22,10 @@ run_disk_test() {
     
     local output_dir="${RESULT_DIR:-output}"
     local json_file="$output_dir/disk.json"
+    local seq_read_json="$output_dir/fio_seq_read.json"
+    local seq_write_json="$output_dir/fio_seq_write.json"
+    local rand_read_json="$output_dir/fio_rand_read.json"
+    local rand_write_json="$output_dir/fio_rand_write.json"
     
     # Create directories
     mkdir -p "$DISK_TEST_DIR"
