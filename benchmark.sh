@@ -17,16 +17,25 @@ set -e
 # Script Directory and Version
 # ============================================================================
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VERSION="1.0.0"
 
 # ============================================================================
 # Default Configuration
 # ============================================================================
+# Configuration
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+RESULT_DIR="${RESULT_DIR:-$SCRIPT_DIR/output}"
+# Use a local temporary directory to avoid filling up system /tmp (RAM)
+TEMP_DIR="$SCRIPT_DIR/tmp_meta"
+export TMPDIR="$TEMP_DIR"
+
+# Ensure temp directory exists
+mkdir -p "$TEMP_DIR"
+
+DISK_TEST_DIR="${DISK_TEST_DIR:-$SCRIPT_DIR/tmp_disk_test}"
+STATE_FILE="$TEMP_DIR/benchmark_state.json"
 
 DURATION="10m"
-RESULT_DIR="$SCRIPT_DIR/output"
-STATE_FILE="/var/tmp/linux-benchmark.state"
 SKIP_CPU=false
 SKIP_MEMORY=false
 SKIP_DISK=false
@@ -163,20 +172,22 @@ source "$SCRIPT_DIR/lib/report.sh"
 export RESULT_DIR
 export SCRIPT_DIR
 export NO_INTERACTIVE
+export TEMP_DIR
+export DISK_TEST_DIR
 
 # ============================================================================
 # Cleanup
 # ============================================================================
 
 cleanup_all() {
-    # Remove temporary disk test directory
-    if [[ -d "${DISK_TEST_DIR:-$SCRIPT_DIR/tmp_disk_test}" ]]; then
-        rm -rf "${DISK_TEST_DIR:-$SCRIPT_DIR/tmp_disk_test}"
+    # Remove specific test files
+    if [[ -d "${DISK_TEST_DIR}" ]]; then
+        rm -rf "${DISK_TEST_DIR}"
     fi
     
-    # Remove state file
-    if [[ -f "$STATE_FILE" ]]; then
-        rm -f "$STATE_FILE"
+    # Remove local temp directory
+    if [[ -d "$TEMP_DIR" ]]; then
+        rm -rf "$TEMP_DIR"
     fi
     
     # Remove any stray stress-ng yaml files
@@ -186,6 +197,29 @@ cleanup_all() {
     
     # Remove any temp fio json files
     rm -f "$RESULT_DIR"/fio_*.json 2>/dev/null
+}
+
+# ============================================================================
+# Utility Functions
+# ============================================================================
+
+check_disk_space() {
+    local required_space_mb=2048 # 2GB
+    local available_space_mb=$(df -m "$SCRIPT_DIR" | awk 'NR==2 {print $4}')
+    
+    if [[ "$available_space_mb" -lt "$required_space_mb" ]]; then
+        log "Insufficient disk space. Required: ${required_space_mb}MB, Available: ${available_space_mb}MB" ERROR
+        log "Please free up space on $(df -P "$SCRIPT_DIR" | awk 'NR==2 {print $6}')" ERROR
+        exit 1
+    fi
+    
+    # Also check if /tmp is usable if we were using it, but we are using local TMPDIR now.
+    # We still check if the filesystem is read-only.
+    if ! touch "$TEMP_DIR/write_test"; then
+        log "Cannot write to temporary directory: $TEMP_DIR" ERROR
+        exit 1
+    fi
+    rm -f "$TEMP_DIR/write_test"
 }
 
 # ============================================================================
@@ -225,6 +259,7 @@ BANNER
     # Pre-flight Checks
     # ─────────────────────────────────────────────────────────────────────────
     
+    check_disk_space
     check_root
     check_dependencies || true
     install_dependencies
