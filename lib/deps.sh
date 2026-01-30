@@ -156,14 +156,22 @@ maybe_upgrade_and_reboot() {
                 save_state "POST_UPGRADE"
                 
                 echo ""
-                echo -e "${BOLD}${YELLOW}The system needs to reboot.${RESET}"
-                echo -e "After reboot, run this script again to continue."
+                echo -e "${YELLOW}┌────────────────────────────────────────────────────────────────────────┐${RESET}"
+                echo -e "${YELLOW}│${RESET}  ${BOLD}System Reboot Required${RESET}                                                ${YELLOW}│${RESET}"
+                echo -e "${YELLOW}│${RESET}                                                                        ${YELLOW}│${RESET}"
+                echo -e "${YELLOW}│${RESET}  The system upgrade installed updates that require a restart.          ${YELLOW}│${RESET}"
+                echo -e "${YELLOW}│${RESET}  Please reboot the server and ${BOLD}run this script again${RESET} to continue.      ${YELLOW}│${RESET}"
+                echo -e "${YELLOW}└────────────────────────────────────────────────────────────────────────┘${RESET}"
                 echo ""
                 
                 read -p "$(echo -e "${BOLD}Reboot now? [y/N]:${RESET} ")" reboot_ans
                 if [[ "${reboot_ans,,}" == "y" ]]; then
                     log "Rebooting system..." STEP
                     reboot
+                else
+                    echo ""
+                    log "Please remember to reboot manually and re-run the script!" WARN
+                    exit 0
                 fi
             else
                 log "Upgrade completed. No reboot required." SUCCESS
