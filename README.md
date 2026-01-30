@@ -305,7 +305,20 @@ git checkout -b feature/amazing-feature
 # Commit and push
 git commit -m "Add amazing feature"
 git push origin feature/amazing-feature
-```
+---
+
+## 🙏 Acknowledgments
+
+This project is built on top of these amazing open-source tools:
+
+| Tool | Purpose | Link |
+|------|---------|------|
+| **sysbench** | CPU & memory benchmarking | [github.com/akopytov/sysbench](https://github.com/akopytov/sysbench) |
+| **fio** | Flexible I/O tester | [github.com/axboe/fio](https://github.com/axboe/fio) |
+| **stress-ng** | System stress testing | [github.com/ColinIanKing/stress-ng](https://github.com/ColinIanKing/stress-ng) |
+| **jq** | JSON processing | [github.com/stedolan/jq](https://github.com/stedolan/jq) |
+| **Chart.js** | HTML report visualizations | [chartjs.org](https://www.chartjs.org/) |
+| **intel-gpu-tools** | Intel GPU benchmarking | [gitlab.freedesktop.org/drm/igt-gpu-tools](https://gitlab.freedesktop.org/drm/igt-gpu-tools) |
 
 ---
 
