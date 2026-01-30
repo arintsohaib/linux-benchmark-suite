@@ -32,6 +32,15 @@ run_disk_test() {
     echo -e "  ${BOLD}Test path:${RESET}   $DISK_TEST_DIR"
     echo ""
     
+    # Check O_DIRECT support
+    local fio_direct=1
+    local odirect_test_log="$(mktemp)"
+    if ! fio --name=odirect_test --directory="$DISK_TEST_DIR" --size=1M --rw=read --direct=1 --ioengine=libaio --output-format=json &> "$odirect_test_log"; then
+        log "System does not support O_DIRECT (common in containers). Falling back to direct=0." WARN
+        fio_direct=0
+    fi
+    rm -f "$odirect_test_log"
+    
     # Initialize JSON
     echo "{" > "$json_file"
     echo "  \"test_type\": \"disk\"," >> "$json_file"
@@ -59,7 +68,7 @@ run_disk_test() {
         --rw=read \
         --bs=1M \
         --ioengine=libaio \
-        --direct=1 \
+        --direct=$fio_direct \
         --numjobs=1 \
         --group_reporting \
         --output-format=json \
@@ -83,9 +92,9 @@ run_disk_test() {
     echo -e "  ${CHECK} Latency:    ${seq_read_lat_ms}ms"
     
     echo "    \"sequential_read\": {" >> "$json_file"
-    echo "      \"bandwidth_mbps\": ${seq_read_mb}," >> "$json_file"
+    echo "      \"bandwidth_mbps\": ${seq_read_mb:-0}," >> "$json_file"
     echo "      \"iops\": ${seq_read_iops:-0}," >> "$json_file"
-    echo "      \"latency_ms\": ${seq_read_lat_ms}" >> "$json_file"
+    echo "      \"latency_ms\": ${seq_read_lat_ms:-0}" >> "$json_file"
     echo "    }," >> "$json_file"
     
     # ─────────────────────────────────────────────────────────────────────────
@@ -104,7 +113,7 @@ run_disk_test() {
         --rw=write \
         --bs=1M \
         --ioengine=libaio \
-        --direct=1 \
+        --direct=$fio_direct \
         --numjobs=1 \
         --group_reporting \
         --output-format=json \
@@ -128,9 +137,9 @@ run_disk_test() {
     echo -e "  ${CHECK} Latency:    ${seq_write_lat_ms}ms"
     
     echo "    \"sequential_write\": {" >> "$json_file"
-    echo "      \"bandwidth_mbps\": ${seq_write_mb}," >> "$json_file"
+    echo "      \"bandwidth_mbps\": ${seq_write_mb:-0}," >> "$json_file"
     echo "      \"iops\": ${seq_write_iops:-0}," >> "$json_file"
-    echo "      \"latency_ms\": ${seq_write_lat_ms}" >> "$json_file"
+    echo "      \"latency_ms\": ${seq_write_lat_ms:-0}" >> "$json_file"
     echo "    }," >> "$json_file"
     
     # ─────────────────────────────────────────────────────────────────────────
@@ -149,7 +158,7 @@ run_disk_test() {
         --rw=randread \
         --bs=4k \
         --ioengine=libaio \
-        --direct=1 \
+        --direct=$fio_direct \
         --numjobs=4 \
         --iodepth=32 \
         --group_reporting \
@@ -171,7 +180,7 @@ run_disk_test() {
     
     echo "    \"random_read_4k\": {" >> "$json_file"
     echo "      \"iops\": ${rand_read_iops:-0}," >> "$json_file"
-    echo "      \"latency_ms\": ${rand_read_lat_ms}" >> "$json_file"
+    echo "      \"latency_ms\": ${rand_read_lat_ms:-0}" >> "$json_file"
     echo "    }," >> "$json_file"
     
     # ─────────────────────────────────────────────────────────────────────────
@@ -190,7 +199,7 @@ run_disk_test() {
         --rw=randwrite \
         --bs=4k \
         --ioengine=libaio \
-        --direct=1 \
+        --direct=$fio_direct \
         --numjobs=4 \
         --iodepth=32 \
         --group_reporting \
@@ -212,7 +221,7 @@ run_disk_test() {
     
     echo "    \"random_write_4k\": {" >> "$json_file"
     echo "      \"iops\": ${rand_write_iops:-0}," >> "$json_file"
-    echo "      \"latency_ms\": ${rand_write_lat_ms}" >> "$json_file"
+    echo "      \"latency_ms\": ${rand_write_lat_ms:-0}" >> "$json_file"
     echo "    }" >> "$json_file"
     
     # Close JSON
